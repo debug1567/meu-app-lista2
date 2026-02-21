@@ -1,0 +1,104 @@
+<!DOCTYPE html><html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aniversário da Maya</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:'Fredoka',sans-serif;
+  background:linear-gradient(135deg,#e4c6ff,#6bc5ff);
+  overflow:hidden;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}.background-img{position:fixed;width:170px;opacity:.15} .stitch1{top:10px;left:10px} .stitch2{bottom:10px;right:10px}
+
+.container{ background:rgba(255,255,255,.15); backdrop-filter:blur(15px); padding:30px; border-radius:30px; width:90%; max-width:420px; text-align:center; box-shadow:0 10px 40px rgba(0,0,0,.3); z-index:2; }
+
+.nome{ font-size:34px; font-weight:bold; animation:brilho 2s infinite alternate; }
+
+@keyframes brilho{ from{text-shadow:0 0 5px #fff,0 0 15px #ff9de2} to{text-shadow:0 0 20px #fff,0 0 30px #6ecbff} }
+
+.info{font-size:14px;margin:10px 0}
+
+input{ width:100%; padding:12px; border-radius:15px; border:none; margin:15px 0; font-size:16px; }
+
+button{ background:linear-gradient(90deg,#ff9de2,#6ecbff); border:none; padding:12px 20px; border-radius:15px; font-size:16px; cursor:pointer; color:white; font-weight:bold; transition:.3s; } button:hover{transform:scale(1.08)}
+
+.hidden{display:none}
+
+.lista{text-align:left;margin-top:20px} .nome-item{ background:rgba(255,255,255,.25); padding:10px; border-radius:10px; margin:5px 0; }
+
+.admin-btn{ position:fixed; bottom:15px; right:15px; background:white; color:#6a4cff; font-size:12px; padding:8px 12px; border-radius:10px; }
+
+.heart{ position:fixed; bottom:-20px; animation:subir 6s linear infinite; } @keyframes subir{ 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(-110vh);opacity:0} }
+
+.linkmap{ margin-top:10px; display:inline-block; font-size:13px; color:white; } </style>
+
+</head>
+<body><img src="https://i.imgur.com/9yG3Z3V.png" class="background-img stitch1">
+<img src="https://i.imgur.com/9yG3Z3V.png" class="background-img stitch2"><div class="container" id="app">  <div class="nome">Maya faz 2 anos 🎉</div>  <div class="info">
+    📅 23/03 <br>
+    ⏰ 19:00 <br>
+    📍 Avenida Paracatu número 684 <br>
+    Quintas Avenidas (Planeta Kids)
+  </div><a class="linkmap" href="https://www.google.com/maps/place/Planeta+Kids+Sal%C3%A3o+de+Festas+-+R.+Paracatu,+684+-+Quintas+das+Avenidas,+Juiz+de+Fora+-+MG,+36046-040/@-21.7290317,-43.3563025,15z/data=!4m6!3m5!1s0x989ce50eb0515f:0xe62be538aaf57b9c!8m2!3d-21.7290317!4d-43.3563025!16s%2Fg%2F11c20t1hp0?utm_campaign=ml-ardl&g_ep=Eg1tbF8yMDI2MDIxOF8wIJvbDyoASAJQAQ%3D%3D" target="_blank">Abrir no Google Maps 📍</a>
+
+  <input type="text" id="nome" placeholder="Digite seu nome">
+  <button onclick="confirmar()">Confirmar Presença 💖</button>
+  <p id="msg"></p>
+</div><div class="container hidden" id="admin">
+  <h2>Lista de Confirmados</h2>
+  <div class="lista" id="lista"></div>
+</div><button class="admin-btn" onclick="acessoAdmin()">Área Secreta</button>
+
+<script>
+function confirmar(){
+  let nome=document.getElementById("nome").value.trim();
+  if(nome===""){document.getElementById("msg").innerText="Digite seu nome!";return}
+
+  let dados=JSON.parse(localStorage.getItem("confirmados")||"[]");
+  dados.push(nome);
+  localStorage.setItem("confirmados",JSON.stringify(dados));
+
+  document.getElementById("msg").innerText="Presença confirmada 💙";
+  document.getElementById("nome").value="";
+}
+
+function acessoAdmin(){
+  let senha=prompt("Senha:");
+  if(senha==="1234"){
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("admin").classList.remove("hidden");
+    mostrarLista();
+  }else alert("Senha incorreta");
+}
+
+function mostrarLista(){
+  let dados=JSON.parse(localStorage.getItem("confirmados")||"[]");
+  let lista=document.getElementById("lista");
+  lista.innerHTML="";
+  dados.forEach(nome=>{
+    let div=document.createElement("div");
+    div.className="nome-item";
+    div.innerText=nome;
+    lista.appendChild(div);
+  });
+}
+
+setInterval(()=>{
+  let heart=document.createElement("div");
+  heart.className="heart";
+  heart.style.left=Math.random()*100+"vw";
+  heart.innerText=Math.random()>0.5?"💖":"💙";
+  heart.style.fontSize=(Math.random()*20+15)+"px";
+  document.body.appendChild(heart);
+  setTimeout(()=>heart.remove(),6000);
+},500);
+</script></body>
+</html>
